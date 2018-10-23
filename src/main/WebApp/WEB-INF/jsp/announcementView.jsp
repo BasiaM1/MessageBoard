@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Announceent border</title>
+    <title>Announcement border</title>
 </head>
 <body>
 <style>
