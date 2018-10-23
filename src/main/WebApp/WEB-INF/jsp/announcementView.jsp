@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tweet form</title>
+    <title>Announceent border</title>
 </head>
 <body>
 <style>
