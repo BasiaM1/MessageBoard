@@ -18,9 +18,10 @@
 <form:form method="post" enctype="multipart/form-data">
 
     Title: <input type="text" name="title"/><br/>
+    <form:errors path="text" cssClass="error"/><br>
 
     Description: <textarea name="decription"></textarea><br/>
-
+    <form:errors path="description" cssClass="error"/><br>
     Picture: <input type="file" name="picture"/>
 
 
