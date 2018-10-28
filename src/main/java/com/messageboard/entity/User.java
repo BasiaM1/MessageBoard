@@ -1,16 +1,21 @@
 package com.messageboard.entity;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
 @Table(name="user_board")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +26,8 @@ public class User {
 
     @NotEmpty
     private String password;
+
+    private boolean enabled;
 
     @NotEmpty
     @Email
@@ -43,7 +50,24 @@ public class User {
     private List<Comment> comments = new ArrayList<>();
 
 
+
     public User() {
+    }
+
+    public List<Announcement> getAnnouncements() {
+        return announcements;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void setAnnouncements(List<Announcement> announcements) {
+        this.announcements = announcements;
     }
 
     public Long getId() {
@@ -54,14 +78,36 @@ public class User {
         this.id = id;
     }
 
+    @Override
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.EMPTY_LIST;
+    }
+
+    @Override
     public String getPassword() {
         return password;
     }
@@ -70,12 +116,9 @@ public class User {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
     public String getName() {
@@ -102,19 +145,47 @@ public class User {
         this.aboutme = aboutme;
     }
 
-    public List<Announcement> getAnnouncements() {
-        return announcements;
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
-    public void setAnnouncements(List<Announcement> announcements) {
-        this.announcements = announcements;
+    public String getEmail() {
+        return email;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (enabled != user.enabled) return false;
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        if (username != null ? !username.equals(user.username) : user.username != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (name != null ? !name.equals(user.name) : user.name != null) return false;
+        if (surname != null ? !surname.equals(user.surname) : user.surname != null) return false;
+        return aboutme != null ? aboutme.equals(user.aboutme) : user.aboutme == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (username != null ? username.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (enabled ? 1 : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (surname != null ? surname.hashCode() : 0);
+        result = 31 * result + (aboutme != null ? aboutme.hashCode() : 0);
+        return result;
     }
 }
