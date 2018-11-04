@@ -78,4 +78,31 @@ public class UserController {
 //        model.addAttribute("outbox", messageRepository.findAllBySenderId(id));
         return "profile";
     }
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
+    public String editProfile(Model model, @PathVariable Long id) {
+
+        User user= userRepository.getOne(id);
+        model.addAttribute("user", user);
+        return "userForm";
+    }
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.POST)
+    public String editProfilrPost(@Valid User user, BindingResult result) {
+//        User user = userRepository.getOne(id);
+//        model.addAttribute("user", user);
+        if (result.hasErrors()) {
+            return "userForm";
+        }
+
+        userRepository.save(user);
+        return "redirect:/user/" + user.getId();
+    }
+
+    @RequestMapping(value = "/{id}/aboutUser", method = RequestMethod.GET)
+    public String aboutByUser(Model model, @PathVariable Long id) {
+        User user = userRepository.getOne(id);
+        model.addAttribute("user", user);
+        List<Announcement> userAnnouncements = announcementRepository.findAllByUserId(id);
+        model.addAttribute("announcements", userAnnouncements);
+        return "profileVisible";
+    }
 }

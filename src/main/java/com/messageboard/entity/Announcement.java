@@ -21,7 +21,7 @@ public class Announcement {
 
     @Size(min = 10, max = 160)
     @NotEmpty
-    private String decription;
+    private String description;
 
     private Date created;
 
@@ -53,12 +53,12 @@ public class Announcement {
         this.title = title;
     }
 
-    public String getDecription() {
-        return decription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDecription(String decription) {
-        this.decription = decription;
+    public void setDescription(String decription) {
+        this.description = decription;
     }
 
     public Date getCreated() {

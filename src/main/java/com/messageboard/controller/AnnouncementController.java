@@ -1,6 +1,7 @@
 package com.messageboard.controller;
 
 import com.messageboard.entity.Announcement;
+import com.messageboard.entity.User;
 import com.messageboard.repository.AnnouncementRepository;
 import com.messageboard.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,39 +45,52 @@ public class AnnouncementController {
 
 
     @GetMapping("/add")
-    public String addPrepare(Model model, @RequestParam("userId") Long userId){
-        Announcement a = new Announcement();
-        a.setUser(userRepository.findById(userId).get());
-        model.addAttribute("announcement", a);
+    public String addPrepare(Model model/*@RequestParam("userId") Long userId*/){
+        Announcement announcement = new Announcement();
+//        announcement.setUser(userRepository.findById(userId).get());
+        model.addAttribute("announcement", announcement);
         return "announcementForm";
     }
-
+    /*@RequestParam("title") String title, @RequestParam("decription") String desc*/
     @PostMapping("/add")
-    public String add(@Valid Announcement a, BindingResult result,@RequestParam("picture") MultipartFile file, @RequestParam("title") String title, @RequestParam("decription") String desc) throws IOException {
+public String add(@Valid Announcement announcement, BindingResult result,@RequestParam("picture") MultipartFile file,@RequestParam("title") String title, @RequestParam("description") String description, @RequestParam("userId") Long userId) throws IOException {
 
-        if (result.hasErrors()) {
-            return "announcementForm";
-        }
-
-        a.setTitle(title);
-        a.setDecription(desc);
+//        if (result.hasErrors()) {
+//            return "announcementForm";
+//        }
+        announcement.setUser(userRepository.findById(userId).get());
+        announcement.setTitle(title);
+        announcement.setDescription(description);
 
         Date now = new Date();
-        a.setCreated(now);
+        announcement.setCreated(now);
 
         Calendar c = Calendar.getInstance();
         c.setTime(now);
         c.add(Calendar.MONTH, 3);
 
         Date expired = c.getTime();
-        a.setExpired(expired);
+        announcement.setExpired(expired);
 
-        a.setPicture(file.getBytes());
+        announcement.setPicture(file.getBytes());
 
-        announcementRepository.save(a);
+        announcementRepository.save(announcement);
 
-        return "redirect:/user/" + a.getUser().getId() ;
+        return "redirect:/user/" + announcement.getUser().getId() ;
     }
 
+    @ModelAttribute("all")
+    public List<Announcement> getAllAnnouncements() {
+        List<Announcement> announcementList= announcementRepository.findAll();
+        return announcementList;
+    }
 
+    @RequestMapping(value = "/{id}/announcements", method = RequestMethod.GET)
+    public String getAnnouncementssByUser(Model model, @PathVariable Long id) {
+        User user = userRepository.getOne(id);
+        model.addAttribute("user", user);
+        List<Announcement> userAnnouncements = announcementRepository.findAllByUserId(id);
+        model.addAttribute("announcements", userAnnouncements);
+        return "userannouncements";
+    }
 }

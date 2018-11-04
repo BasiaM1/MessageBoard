@@ -16,11 +16,13 @@
 </style>
 
 <form:form method="post" enctype="multipart/form-data">
+    <%--<form:hidden path="id"/>--%>
+    <%--<form:hidden path="user.id"/>--%>
 
     Title: <input type="text" name="title"/><br/>
-    <form:errors path="text" cssClass="error"/><br>
+    <form:errors path="title" cssClass="error"/><br>
 
-    Description: <textarea name="decription"></textarea><br/>
+    Description: <textarea name="description"></textarea><br/>
     <form:errors path="description" cssClass="error"/><br>
     Picture: <input type="file" name="picture"/>
 

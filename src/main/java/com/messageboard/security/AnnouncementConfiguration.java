@@ -19,7 +19,7 @@ public class AnnouncementConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.authorizeRequests()
                 .antMatchers("/user/register", "/login").anonymous()
-                .antMatchers("/user/all", "/announcement/like").permitAll()
+                .antMatchers("/user/all", "/announcement/like", "/announcement/all").permitAll()
                 .antMatchers("/user/**", "/announcement/**").authenticated()
                 .anyRequest().permitAll()
                 .and()

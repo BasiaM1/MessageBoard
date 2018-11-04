@@ -41,8 +41,40 @@
 </div>
 Announcement border
 
+<p style="color:white">All announcements:</p>
+<table border="2", align="center">
+    <tr>
+        <th>Nickname</th>
+        <th >Created</th>
+        <th>Expired</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Add a comment</th>
+        <th>Comments</th>
 
-<a href="./announcement/all"><p>Show all announcements</p></a>
+    </tr>
 
+    <c:forEach items="${announcements}" var="a">
+    <tr>
+
+        <td><a href="/user/${a.user.id}/aboutUser">${a.user.username}</a></td>
+        <td>${a.created}</td>
+        <td>${a.expired}</td>
+        <td>${a.title}</td>
+        <td>${a.description}</td>
+
+
+        <td><a href="/announcement/${a.id}/comment">Add a comment</a></td>
+
+        <td>
+            <c:forEach items="${a.comments}" var="comment">
+                Utworzono: ${comment.created}
+                <br>
+                ${comment.text}
+            </c:forEach>
+        </td>
+        </c:forEach>
+    </tr>
+</table>
 </body>
 </html>
